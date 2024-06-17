@@ -1,7 +1,9 @@
 <html>
 <head>
-<http-equiv="refresh" content="6; url=https://harrykauhaad.com/">
-<title>Redirect in <div id="countdown"></div></title>
+<meta http-equiv="refresh" content="6; url=http://harrykauhaad.com/" />
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<title>harrykauhaad.com</title>
 <link rel="stylesheet" href="/css/harry.css">
 </head>
 <body>
@@ -9,13 +11,13 @@
 <div id="gradient"></div>
 <div id="pattern"></div>
 <script>
-  var timeleft = 6;
+  var timeleft = 4;
 var downloadTimer = setInterval(function(){
   if(timeleft <= 0){
     clearInterval(downloadTimer);
-    document.getElementById("countdown").innerHTML = "Finished";
+    document.getElementById("countdown").innerHTML = "";
   } else {
-    document.getElementById("countdown").innerHTML = timeleft + " seconds remaining";
+    document.getElementById("countdown").innerHTML = timeleft + " seconds";
   }
   timeleft -= 1;
 }, 1000);
