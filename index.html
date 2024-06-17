@@ -1,0 +1,25 @@
+<html>
+<head>
+<http-equiv="refresh" content="6; url=https://harrykauhaad.com/">
+<title>Redirect in <div id="countdown"></div></title>
+<link rel="stylesheet" href="/css/harry.css">
+</head>
+<body>
+<h1>Redirecting in <div id="countdown"></div></h1>
+<div id="gradient"></div>
+<div id="pattern"></div>
+<script>
+  var timeleft = 6;
+var downloadTimer = setInterval(function(){
+  if(timeleft <= 0){
+    clearInterval(downloadTimer);
+    document.getElementById("countdown").innerHTML = "Finished";
+  } else {
+    document.getElementById("countdown").innerHTML = timeleft + " seconds remaining";
+  }
+  timeleft -= 1;
+}, 1000);
+</script>
+<script src="/js/harry.js"></script> 
+</body>
+</html>
