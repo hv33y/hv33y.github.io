@@ -36,18 +36,46 @@ jobs:
             "SmartTube Stable (Backup)|yuliskov/SmartTube|armeabi-v7a\.apk$"
           )
 
+          # Ensure custom domain persistence for GitHub Pages
+          echo "d.harry.run" > CNAME
+
           # Start README.md
           echo "# Direct App Downloads (@hv33y)" > README.md
           echo "" >> README.md
 
-          # Start index.html header (Clean, minimal, pure white background)
+          # Start index.html header with updated SEO for d.harry.run
           cat << 'EOF' > index.html
           <!DOCTYPE html>
           <html lang="en">
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>App Downloader - @hv33y</title>
+            <title>App Downloader | @hv33y</title>
+
+            <!-- SEO Meta Tags -->
+            <meta name="description" content="Direct, remote-friendly APK downloads for Android TV and Fire TV maintained by @hv33y.">
+            <meta name="author" content="hv33y">
+            <meta name="robots" content="index, follow">
+            <link rel="canonical" href="https://d.harry.run/">
+
+            <!-- Open Graph / Facebook / Discord -->
+            <meta property="og:type" content="website">
+            <meta property="og:title" content="App Downloader | @hv33y">
+            <meta property="og:description" content="Direct, remote-friendly APK downloads for Android TV and Fire TV maintained by @hv33y.">
+            <meta property="og:url" content="https://d.harry.run/">
+            <meta property="og:site_name" content="hv33y App Downloader">
+            <meta property="og:image" content="https://github.com/hv33y.png">
+
+            <!-- Twitter Card -->
+            <meta name="twitter:card" content="summary">
+            <meta name="twitter:title" content="App Downloader | @hv33y">
+            <meta name="twitter:description" content="Direct, remote-friendly APK downloads for Android TV and Fire TV maintained by @hv33y.">
+            <meta name="twitter:image" content="https://github.com/hv33y.png">
+
+            <!-- Favicons -->
+            <link rel="icon" type="image/png" href="https://github.com/hv33y.png">
+            <link rel="apple-touch-icon" href="https://github.com/hv33y.png">
+
             <style>
               * {
                 box-sizing: border-box;
@@ -61,11 +89,32 @@ jobs:
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                min-height: 100vh;
+              }
+              .container {
+                width: 100%;
+                max-width: 600px;
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+              }
+              header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 2rem;
+              }
+              .avatar {
+                width: 64px;
+                height: 64px;
+                border-radius: 50%;
+                margin-bottom: 1rem;
+                border: 2px solid #e5e7eb;
               }
               h1 {
-                font-size: 2rem;
+                font-size: 1.85rem;
                 font-weight: 800;
-                margin-bottom: 2rem;
+                margin: 0;
                 text-align: center;
                 letter-spacing: -0.025em;
               }
@@ -74,7 +123,6 @@ jobs:
                 flex-direction: column;
                 gap: 1rem;
                 width: 100%;
-                max-width: 600px;
               }
               .card {
                 display: flex;
@@ -90,7 +138,6 @@ jobs:
                 font-weight: 600;
                 transition: border-color 0.15s ease, background-color 0.15s ease;
               }
-              /* Clear remote/cursor focus states */
               .card:hover, .card:focus {
                 background-color: #f9fafb;
                 border-color: #111827;
@@ -104,11 +151,30 @@ jobs:
                 padding: 0.5rem 1rem;
                 border-radius: 6px;
               }
+              footer {
+                margin-top: auto;
+                padding-top: 3rem;
+                text-align: center;
+                font-size: 0.9rem;
+              }
+              footer a {
+                color: #6b7280;
+                text-decoration: none;
+                font-weight: 500;
+              }
+              footer a:hover, footer a:focus {
+                color: #111827;
+                text-decoration: underline;
+              }
             </style>
           </head>
           <body>
-            <h1>Direct App Downloads</h1>
-            <div class="grid">
+            <div class="container">
+              <header>
+                <img class="avatar" src="https://github.com/hv33y.png" alt="hv33y avatar">
+                <h1>Direct App Downloads</h1>
+              </header>
+              <div class="grid">
           EOF
 
           # Process apps
@@ -142,8 +208,12 @@ jobs:
             fi
           done
 
-          # Close index.html
+          # Close index.html with footer
           cat << 'EOF' >> index.html
+              </div>
+              <footer>
+                <a href="https://github.com/hv33y" target="_blank" rel="noopener noreferrer">github.com/hv33y</a>
+              </footer>
             </div>
           </body>
           </html>
@@ -154,12 +224,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add README.md index.html
+          git add README.md index.html CNAME
 
           if git diff --staged --quiet; then
             echo "No changes detected. Everything is up to date."
           else
-            git commit -m "Update app download links"
+            git commit -m "Configure d.harry.run domain and update links"
             git push origin master
           fi
 
@@ -182,7 +252,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
     environment:
       name: github-pages
