@@ -7,7 +7,9 @@ on:
   workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
 
 permissions:
-  contents: write # Needed to commit changes back to the repository
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   update-readme:
