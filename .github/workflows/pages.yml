@@ -2,11 +2,13 @@ name: Update README and Deploy Pages
 
 on:
   schedule:
+    # Runs automatically every 6 hours
     - cron: '0 */6 * * *'
   push:
     branches: ["master"]
   workflow_dispatch:
 
+# Grant token permissions to write commits and publish to Pages
 permissions:
   contents: write
   pages: write
@@ -25,22 +27,21 @@ jobs:
 
       - name: Fetch latest cobalt-arm.apk release URL
         id: get_release
+        env:
+          # Automatically uses GitHub's built-in token (no manual setup required)
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          RELEASE_JSON=$(curl -sL \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/reisxd/TizenTubeCobalt/releases/latest)
-
-          DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '
-            .assets[] 
-            | select(.name == "cobalt-arm.apk") 
-            | .browser_download_url
-          ' | head -n 1)
+          DOWNLOAD_URL=$(gh release view \
+            --repo reisxd/TizenTubeCobalt \
+            --json assets \
+            --jq '.assets[] | select(.name == "cobalt-arm.apk") | .url' | head -n 1)
 
           if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
             echo "Error: Could not find cobalt-arm.apk in the latest release."
             exit 1
           fi
 
+          echo "Found APK URL: $DOWNLOAD_URL"
           echo "download_url=$DOWNLOAD_URL" >> "$GITHUB_OUTPUT"
 
       - name: Overwrite README.md
@@ -68,15 +69,15 @@ jobs:
     needs: update-readme
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout updated repo
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: master
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
