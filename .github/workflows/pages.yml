@@ -1,14 +1,12 @@
-name: Update README and Deploy Pages
+name: Update Apps and Deploy Pages
 
 on:
   schedule:
-    # Runs automatically every 6 hours
     - cron: '0 */6 * * *'
   push:
     branches: ["master"]
   workflow_dispatch:
 
-# Grant token permissions to write commits and publish to Pages
 permissions:
   contents: write
   pages: write
@@ -19,54 +17,148 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  update-readme:
+  update-apps:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch latest cobalt-arm.apk release URL
-        id: get_release
+      - name: Fetch Latest Releases & Generate Files
         env:
-          # Automatically uses GitHub's built-in token (no manual setup required)
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          DOWNLOAD_URL=$(gh release view \
-            --repo reisxd/TizenTubeCobalt \
-            --json assets \
-            --jq '.assets[] | select(.name == "cobalt-arm.apk") | .url' | head -n 1)
+          # -------------------------------------------------------------
+          # DEFINE YOUR APPS HERE
+          # Format: "Display Name | repo/owner | asset_pattern"
+          # -------------------------------------------------------------
+          APPS=(
+            "Tizen Tube Cobalt|reisxd/TizenTubeCobalt|cobalt-arm\.apk"
+            "SmartTube Stable|yuliskov/SmartTube|armeabi-v7a\.apk$"
+          )
 
-          if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
-            echo "Error: Could not find cobalt-arm.apk in the latest release."
-            exit 1
-          fi
+          # Start Clean README.md
+          echo "# Downloader App Store" > README.md
+          echo "" >> README.md
 
-          echo "Found APK URL: $DOWNLOAD_URL"
-          echo "download_url=$DOWNLOAD_URL" >> "$GITHUB_OUTPUT"
-
-      - name: Overwrite README.md
-        run: |
-          cat << 'EOF' > README.md
-          - [YouTube](${{ steps.get_release.outputs.download_url }})
+          # Start Clean index.html (Optimized for AFTVnews Downloader Remote Cursor)
+          cat << 'EOF' > index.html
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>App Downloader - @hv33y</title>
+            <style>
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                background-color: #0f172a;
+                color: #f8fafc;
+                margin: 0;
+                padding: 2.5rem 1.5rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+              }
+              h1 {
+                font-size: 2.2rem;
+                margin-bottom: 2rem;
+                text-align: center;
+              }
+              .grid {
+                display: flex;
+                flex-direction: column;
+                gap: 1.25rem;
+                width: 100%;
+                max-width: 650px;
+              }
+              .card {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background-color: #1e293b;
+                border: 2px solid #334155;
+                border-radius: 16px;
+                padding: 1.5rem 2rem;
+                text-decoration: none;
+                color: #ffffff;
+                font-size: 1.5rem;
+                font-weight: 700;
+                transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+              }
+              /* Fire TV / Downloader cursor hover & focus rings */
+              .card:hover, .card:focus {
+                background-color: #2563eb;
+                border-color: #60a5fa;
+                transform: scale(1.03);
+                outline: 4px solid #93c5fd;
+              }
+              .badge {
+                font-size: 1rem;
+                background: #0ea5e9;
+                padding: 0.4rem 0.8rem;
+                border-radius: 8px;
+                font-weight: 600;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>Direct App Downloads (@hv33y)</h1>
+            <div class="grid">
           EOF
-          sed -i -e '$a\' README.md
+
+          # Loop through each configured app
+          for entry in "${APPS[@]}"; do
+            IFS="|" read -r APP_NAME APP_REPO APP_ASSET <<< "$entry"
+            
+            echo "Fetching release for $APP_NAME ($APP_REPO)..."
+            
+            # Query GitHub API via gh CLI
+            DOWNLOAD_URL=$(gh release view \
+              --repo "$APP_REPO" \
+              --json assets \
+              --jq ".assets[] | select(.name | test(\"$APP_ASSET\")) | .url" | head -n 1)
+
+            if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
+              echo "Found URL: $DOWNLOAD_URL"
+              
+              # Append to README.md
+              echo "- [$APP_NAME]($DOWNLOAD_URL)" >> README.md
+
+              # Append large clickable button to index.html
+              cat << EOF >> index.html
+              <a href="$DOWNLOAD_URL" class="card">
+                <span>$APP_NAME</span>
+                <span class="badge">Download APK</span>
+              </a>
+          EOF
+            else
+              echo "Warning: Could not fetch asset $APP_ASSET for $APP_REPO"
+            fi
+          done
+
+          # Close index.html
+          cat << 'EOF' >> index.html
+            </div>
+          </body>
+          </html>
+          EOF
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add README.md
+          git add README.md index.html
 
           if git diff --staged --quiet; then
-            echo "README.md is already up to date."
+            echo "No changes detected. Everything is up to date."
           else
-            git commit -m "Update README.md with latest cobalt-arm.apk release"
-            git push
+            git commit -m "Update app download links"
+            git push origin master
           fi
 
   build-and-deploy:
-    needs: update-readme
+    needs: update-apps
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
