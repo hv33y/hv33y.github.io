@@ -1,0 +1,67 @@
+name: Update README with Latest Release
+
+on:
+  schedule:
+    # Runs every 6 hours (adjust cron syntax as needed)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+
+permissions:
+  contents: write # Needed to commit changes back to the repository
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch latest cobalt-arm.apk release URL
+        id: get_release
+        run: |
+          # Fetch latest release data from GitHub API
+          RELEASE_JSON=$(curl -sL \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/reisxd/TizenTubeCobalt/releases/latest)
+
+          # Extract download URL for cobalt-arm.apk (excluding arm64 / v7a specific duplicates if any)
+          # Specifically matches assets named exactly 'cobalt-arm.apk'
+          DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '
+            .assets[] 
+            | select(.name == "cobalt-arm.apk") 
+            | .browser_download_url
+          ' | head -n 1)
+
+          if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
+            echo "Error: Could not find matching cobalt-arm.apk asset in the latest release."
+            exit 1
+          fi
+
+          echo "Found latest ARM APK URL: $DOWNLOAD_URL"
+          echo "download_url=$DOWNLOAD_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Recreate README.md
+        run: |
+          # Rebuild README.md with the exact format
+          cat << 'EOF' > README.md
+          - [YouTube](${{ steps.get_release.outputs.download_url }})
+          EOF
+
+          # Ensure file ends with a clean single newline
+          sed -i -e '$a\' README.md
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          # Only commit and push if README.md has actual diff changes
+          if git diff --staged --quiet; then
+            echo "README.md is already up to date. No changes to commit."
+          else
+            git commit -m "Update README.md with latest cobalt-arm.apk release"
+            git push
+          fi
