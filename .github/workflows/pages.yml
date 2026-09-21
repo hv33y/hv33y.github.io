@@ -29,18 +29,18 @@ jobs:
         run: |
           # -------------------------------------------------------------
           # DEFINE YOUR APPS HERE
-          # Format: "Display Name | repo/owner | asset_pattern"
+          # Format: "Display Name | repo/owner | regex_filename_pattern"
           # -------------------------------------------------------------
           APPS=(
-            "Tizen Tube Cobalt|reisxd/TizenTubeCobalt|cobalt-arm\.apk"
-            "SmartTube Stable|yuliskov/SmartTube|armeabi-v7a\.apk$"
+            "Tizen Tube Cobalt (Youtube TV)|reisxd/TizenTubeCobalt|cobalt-arm\.apk$"
+            "SmartTube Stable (Backup)|yuliskov/SmartTube|armeabi-v7a\.apk$"
           )
 
-          # Start Clean README.md
-          echo "# Downloader App Store" > README.md
+          # Start README.md
+          echo "# Direct App Downloads (@hv33y)" > README.md
           echo "" >> README.md
 
-          # Start Clean index.html (Optimized for AFTVnews Downloader Remote Cursor)
+          # Start index.html header
           cat << 'EOF' > index.html
           <!DOCTYPE html>
           <html lang="en">
@@ -85,7 +85,6 @@ jobs:
                 font-weight: 700;
                 transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
               }
-              /* Fire TV / Downloader cursor hover & focus rings */
               .card:hover, .card:focus {
                 background-color: #2563eb;
                 border-color: #60a5fa;
@@ -106,25 +105,30 @@ jobs:
             <div class="grid">
           EOF
 
-          # Loop through each configured app
+          # Process apps
           for entry in "${APPS[@]}"; do
-            IFS="|" read -r APP_NAME APP_REPO APP_ASSET <<< "$entry"
-            
-            echo "Fetching release for $APP_NAME ($APP_REPO)..."
-            
-            # Query GitHub API via gh CLI
-            DOWNLOAD_URL=$(gh release view \
-              --repo "$APP_REPO" \
-              --json assets \
-              --jq ".assets[] | select(.name | test(\"$APP_ASSET\")) | .url" | head -n 1)
+            IFS="|" read -r APP_NAME APP_REPO APP_PATTERN <<< "$entry"
+            echo "----------------------------------------"
+            echo "Checking: $APP_NAME ($APP_REPO)..."
+            echo "Pattern:  $APP_PATTERN"
 
-            if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
-              echo "Found URL: $DOWNLOAD_URL"
-              
+            # Fetch TSV list of: name <tab> download_url
+            ASSETS_TSV=$(gh release view --repo "$APP_REPO" --json assets --jq '.assets[] | "\(.name)\t\(.url)"')
+
+            # Match filename against the regex pattern using grep -E
+            MATCH=$(echo "$ASSETS_TSV" | grep -E "^[^\t]*${APP_PATTERN}" | head -n 1)
+
+            if [ -n "$MATCH" ]; then
+              MATCH_FILE=$(echo "$MATCH" | cut -f1)
+              DOWNLOAD_URL=$(echo "$MATCH" | cut -f2)
+
+              echo "Matched File: $MATCH_FILE"
+              echo "Matched URL:  $DOWNLOAD_URL"
+
               # Append to README.md
               echo "- [$APP_NAME]($DOWNLOAD_URL)" >> README.md
 
-              # Append large clickable button to index.html
+              # Append to index.html
               cat << EOF >> index.html
               <a href="$DOWNLOAD_URL" class="card">
                 <span>$APP_NAME</span>
@@ -132,7 +136,10 @@ jobs:
               </a>
           EOF
             else
-              echo "Warning: Could not fetch asset $APP_ASSET for $APP_REPO"
+              echo "ERROR: No asset matched regex '$APP_PATTERN' for $APP_REPO"
+              echo "Available assets were:"
+              echo "$ASSETS_TSV" | cut -f1
+              exit 1
             fi
           done
 
