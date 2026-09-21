@@ -112,9 +112,9 @@ jobs:
             echo "Checking: $APP_NAME ($APP_REPO)..."
             echo "Pattern:  $APP_PATTERN"
 
-            # Pass the pattern safely as an arg to jq
-            DOWNLOAD_URL=$(gh release view --repo "$APP_REPO" --json assets \
-              --jq --arg pat "$APP_PATTERN" '.assets[] | select(.name | test($pat)) | .url' | head -n 1)
+            # Pipe gh output directly to standard standalone jq
+            DOWNLOAD_URL=$(gh release view --repo "$APP_REPO" --json assets | \
+              jq -r --arg pat "$APP_PATTERN" '.assets[] | select(.name | test($pat)) | .url' | head -n 1)
 
             if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
               echo "Matched URL: $DOWNLOAD_URL"
