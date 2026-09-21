@@ -1,20 +1,24 @@
-name: Update README with Latest Release
+name: Update README and Deploy Pages
 
 on:
   schedule:
-    # Runs every 6 hours (adjust cron syntax as needed)
     - cron: '0 */6 * * *'
-  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+  push:
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   update-readme:
     runs-on: ubuntu-24.04
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,13 +26,10 @@ jobs:
       - name: Fetch latest cobalt-arm.apk release URL
         id: get_release
         run: |
-          # Fetch latest release data from GitHub API
           RELEASE_JSON=$(curl -sL \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/reisxd/TizenTubeCobalt/releases/latest)
 
-          # Extract download URL for cobalt-arm.apk (excluding arm64 / v7a specific duplicates if any)
-          # Specifically matches assets named exactly 'cobalt-arm.apk'
           DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '
             .assets[] 
             | select(.name == "cobalt-arm.apk") 
@@ -36,34 +37,54 @@ jobs:
           ' | head -n 1)
 
           if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
-            echo "Error: Could not find matching cobalt-arm.apk asset in the latest release."
+            echo "Error: Could not find cobalt-arm.apk in the latest release."
             exit 1
           fi
 
-          echo "Found latest ARM APK URL: $DOWNLOAD_URL"
           echo "download_url=$DOWNLOAD_URL" >> "$GITHUB_OUTPUT"
 
-      - name: Recreate README.md
+      - name: Overwrite README.md
         run: |
-          # Rebuild README.md with the exact format
           cat << 'EOF' > README.md
           - [YouTube](${{ steps.get_release.outputs.download_url }})
           EOF
-
-          # Ensure file ends with a clean single newline
           sed -i -e '$a\' README.md
 
-      - name: Commit and push if changed
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add README.md
 
-          # Only commit and push if README.md has actual diff changes
           if git diff --staged --quiet; then
-            echo "README.md is already up to date. No changes to commit."
+            echo "README.md is already up to date."
           else
             git commit -m "Update README.md with latest cobalt-arm.apk release"
             git push
           fi
+
+  build-and-deploy:
+    needs: update-readme
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout updated repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
