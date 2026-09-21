@@ -5,67 +5,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Downloader - @hv33y</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: #0f172a;
-      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #ffffff;
+      color: #111827;
       margin: 0;
-      padding: 2.5rem 1.5rem;
+      padding: 3rem 1.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: 2rem;
+      font-weight: 800;
       margin-bottom: 2rem;
       text-align: center;
+      letter-spacing: -0.025em;
     }
     .grid {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1rem;
       width: 100%;
-      max-width: 650px;
+      max-width: 600px;
     }
     .card {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: #1e293b;
-      border: 2px solid #334155;
-      border-radius: 16px;
-      padding: 1.5rem 2rem;
+      background-color: #ffffff;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 1.25rem 1.75rem;
       text-decoration: none;
-      color: #ffffff;
-      font-size: 1.5rem;
-      font-weight: 700;
-      transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
-    }
-    .card:hover, .card:focus {
-      background-color: #2563eb;
-      border-color: #60a5fa;
-      transform: scale(1.03);
-      outline: 4px solid #93c5fd;
-    }
-    .badge {
-      font-size: 1rem;
-      background: #0ea5e9;
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
+      color: #111827;
+      font-size: 1.25rem;
       font-weight: 600;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    /* Clear remote/cursor focus states */
+    .card:hover, .card:focus {
+      background-color: #f9fafb;
+      border-color: #111827;
+      outline: 3px solid #111827;
+    }
+    .btn-text {
+      font-size: 0.95rem;
+      font-weight: 700;
+      background-color: #111827;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <h1>Direct App Downloads (@hv33y)</h1>
+  <h1>Direct App Downloads</h1>
   <div class="grid">
     <a href="https://github.com/reisxd/TizenTubeCobalt/releases/download/v2.0.2/cobalt-arm.apk" class="card">
       <span>Tizen Tube Cobalt (Youtube TV)</span>
-      <span class="badge">Download APK</span>
+      <span class="btn-text">Download</span>
     </a>
     <a href="https://github.com/yuliskov/SmartTube/releases/download/32.47s/SmartTube_stable_32.47_armeabi-v7a.apk" class="card">
       <span>SmartTube Stable (Backup)</span>
-      <span class="badge">Download APK</span>
+      <span class="btn-text">Download</span>
     </a>
   </div>
 </body>
