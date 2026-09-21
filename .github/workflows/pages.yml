@@ -29,10 +29,10 @@ jobs:
         run: |
           # -------------------------------------------------------------
           # DEFINE YOUR APPS HERE
-          # Format: "Display Name | repo/owner | regex_filename_pattern"
+          # Format: "Display Name | repo/owner | regex_pattern"
           # -------------------------------------------------------------
           APPS=(
-            "Tizen Tube Cobalt (Youtube TV)|reisxd/TizenTubeCobalt|cobalt-arm\.apk$"
+            "Tizen Tube Cobalt (Youtube TV)|reisxd/TizenTubeCobalt|^cobalt-arm\.apk$"
             "SmartTube Stable (Backup)|yuliskov/SmartTube|armeabi-v7a\.apk$"
           )
 
@@ -112,18 +112,12 @@ jobs:
             echo "Checking: $APP_NAME ($APP_REPO)..."
             echo "Pattern:  $APP_PATTERN"
 
-            # Fetch TSV list of: name <tab> download_url
-            ASSETS_TSV=$(gh release view --repo "$APP_REPO" --json assets --jq '.assets[] | "\(.name)\t\(.url)"')
+            # Pass the pattern safely as an arg to jq
+            DOWNLOAD_URL=$(gh release view --repo "$APP_REPO" --json assets \
+              --jq --arg pat "$APP_PATTERN" '.assets[] | select(.name | test($pat)) | .url' | head -n 1)
 
-            # Match filename against the regex pattern using grep -E
-            MATCH=$(echo "$ASSETS_TSV" | grep -E "^[^\t]*${APP_PATTERN}" | head -n 1)
-
-            if [ -n "$MATCH" ]; then
-              MATCH_FILE=$(echo "$MATCH" | cut -f1)
-              DOWNLOAD_URL=$(echo "$MATCH" | cut -f2)
-
-              echo "Matched File: $MATCH_FILE"
-              echo "Matched URL:  $DOWNLOAD_URL"
+            if [ -n "$DOWNLOAD_URL" ] && [ "$DOWNLOAD_URL" != "null" ]; then
+              echo "Matched URL: $DOWNLOAD_URL"
 
               # Append to README.md
               echo "- [$APP_NAME]($DOWNLOAD_URL)" >> README.md
@@ -138,7 +132,7 @@ jobs:
             else
               echo "ERROR: No asset matched regex '$APP_PATTERN' for $APP_REPO"
               echo "Available assets were:"
-              echo "$ASSETS_TSV" | cut -f1
+              gh release view --repo "$APP_REPO" --json assets --jq '.assets[].name'
               exit 1
             fi
           done
