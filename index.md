@@ -173,7 +173,7 @@ robots: "index, follow"
   <div class="social-pills">
     <a href="https://github.com/hv33y">GitHub</a>
     <a href="/repo">Repositories</a>
-    <a href="mailto:your.email@example.com">Contact</a>
+    <a href="/contact">Contact</a>
   </div>
 </div>
 
