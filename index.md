@@ -20,10 +20,12 @@ twitter:
   image: "https://github.com/hv33y.png"
 ---
 
-<div align="center">
-<link rel="icon" type="image/png" href="https://github.com/hv33y.png">
-<link rel="apple-touch-icon" href="https://github.com/hv33y.png">
+<link rel="icon" type="image/png" href="hv33y.png">
+<link rel="apple-touch-icon" href="hv33y.png">
 
+<div align="center">
+
+<h1>hv33y</h1>
 <h2>Developer • Automation • Web Interfaces</h2>
 
 <p>
@@ -35,7 +37,7 @@ twitter:
 
 Building custom interfaces, system automation, and browser extensions designed for speed, minimal overhead, and modern typography.
 
----
+<hr>
 
 </div>
 
@@ -68,7 +70,7 @@ Building custom interfaces, system automation, and browser extensions designed f
   </tr>
 </table>
 
----
+<hr>
 
 ## Systems & Utilities
 
@@ -78,7 +80,7 @@ Building custom interfaces, system automation, and browser extensions designed f
 * **[abyss-jellyfin](https://github.com/hv33y/abyss-jellyfin)**: Customized high-contrast dark theme engineered for modern media clients.
 * **[gd-index](https://github.com/hv33y/gd-index)**: Multi-branch cloud drive index explorer.
 
----
+<hr>
 
 ## Tech Stack & Focus
 
