@@ -21,8 +21,8 @@ twitter:
 ---
 
 <div align="center">
-
-<h1><a href="https://github.com/hv33y">hv33y</a></h1>
+<link rel="icon" type="image/png" href="https://github.com/hv33y.png">
+<link rel="apple-touch-icon" href="https://github.com/hv33y.png">
 
 <h2>Developer • Automation • Web Interfaces</h2>
 
