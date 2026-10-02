@@ -165,6 +165,7 @@ robots: "index, follow"
 
 <link rel="icon" type="image/png" href="hv33y.png">
 <link rel="apple-touch-icon" href="hv33y.png">
+<link rel="manifest" href="manifest.json">
 
 <div class="hero">
   <h1>hv33y</h1>
