@@ -2,6 +2,23 @@
 layout: default
 title: "Contact | hv33y"
 permalink: /contact/
+description: "Contact information and direct email for hv33y."
+keywords: "hv33y, contact, email, developer"
+author: "hv33y"
+robots: "index, follow"
+
+og:
+  title: "Contact | hv33y"
+  type: website
+  url: "https://hv33y.github.io/contact/"
+  description: "Contact information and direct email for hv33y."
+  image: "https://hv33y.github.io/og-preview.jpg"
+
+twitter:
+  card: summary_large_image
+  title: "Contact | hv33y"
+  description: "Contact information and direct email for hv33y."
+  image: "https://hv33y.github.io/og-preview.jpg"
 ---
 
 <style>
