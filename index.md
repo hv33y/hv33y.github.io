@@ -31,7 +31,7 @@ robots: "index, follow"
 <p>
   <strong>Index</strong> &nbsp;•&nbsp; <a href="/repo">Repositories</a>
 </p>
-
+<hr>
 <h2>Developer • Automation • Web Interfaces</h2>
 
 <p>
