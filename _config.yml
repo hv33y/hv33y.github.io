@@ -1,0 +1,17 @@
+title: "hv33y"
+description: "Developer, Automation & Web Systems"
+url: "https://hv33y.github.io"
+baseurl: ""
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+markdown: kramdown
+highlighter: rouge
+
+exclude:
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
