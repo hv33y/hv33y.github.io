@@ -75,7 +75,7 @@ twitter:
     display: flex; flex-direction: column; color: inherit !important;
   }
   .bento-card h3 { margin-top: 0 !important; font-size: 1.5rem; color: #ffffff; border: none !important; margin-bottom: 15px;}
-  .bento-card p { color: #a1a1a6; font-size: 0.95rem; margin-bottom: 20px; }
+  .bento-card p { color: #a1a1a6; font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
 
   /* Custom UI Elements */
   input[type="number"], input[type="text"] {
@@ -86,10 +86,10 @@ twitter:
   input[type="number"]:focus { border-color: rgba(128, 0, 32, 0.5); }
   
   .file-upload-btn {
-    display: block; width: 100%; background: rgba(255,255,255,0.05);
-    border: 1px dashed rgba(255,255,255,0.2); padding: 20px; text-align: center;
-    border-radius: 12px; cursor: pointer; color: #a1a1a6; transition: all 0.3s;
-    margin-bottom: 15px; box-sizing: border-box; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; width: 100%;
+    background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2);
+    padding: 20px; text-align: center; border-radius: 12px; cursor: pointer;
+    color: #a1a1a6; transition: all 0.3s; margin-bottom: 15px; box-sizing: border-box; font-weight: 600;
   }
   .file-upload-btn:hover { background: rgba(128,0,32,0.1); border-color: #800020; color: #fff; }
   input[type="file"] { display: none; }
@@ -138,7 +138,20 @@ twitter:
     </div>
   </div>
 
-  <!-- TOOL 2: PDF PRIVACY STUDIO -->
+  <!-- TOOL 2: PDF MERGER -->
+  <div class="bento-card">
+    <h3>PDF Merger</h3>
+    <p>Select multiple PDF files to combine them into a single continuous document.</p>
+    
+    <label class="file-upload-btn">
+      <span id="pdf-merge-label">Select PDFs (Multiple allowed)</span>
+      <input type="file" id="pdf-merge-input" accept="application/pdf" multiple>
+    </label>
+    
+    <button class="action-btn" onclick="mergePDFs()" style="margin-top: auto;">Merge & Download</button>
+  </div>
+
+  <!-- TOOL 3: PDF PRIVACY STUDIO -->
   <div class="bento-card">
     <h3>PDF Meta-Stripper</h3>
     <p>Upload a PDF to instantly strip all hidden tracking metadata (author, software, timestamps) and secure the file.</p>
@@ -148,7 +161,20 @@ twitter:
       <input type="file" id="pdf-input" accept="application/pdf">
     </label>
     
-    <button class="action-btn" onclick="cleanPDF()" style="margin-top: auto;">Clean & Download PDF</button>
+    <button class="action-btn" onclick="cleanPDF()" style="margin-top: auto;">Clean & Download</button>
+  </div>
+
+  <!-- TOOL 4: OG BANNER GENERATOR -->
+  <div class="bento-card">
+    <h3>OG Banner Generator</h3>
+    <p>Instantly generate perfectly scaled 1200x630 social preview banners for your domain.</p>
+    
+    <label class="file-upload-btn">
+      <span id="og-label">Select Logo Image</span>
+      <input type="file" id="og-input" accept="image/png, image/jpeg">
+    </label>
+    
+    <button class="action-btn" onclick="generateOG()" style="margin-top: auto;">Generate Banner</button>
   </div>
 
 </div>
@@ -184,25 +210,61 @@ twitter:
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     
-    // Get custom dimensions or fallback to original
     const targetWidth = parseInt(document.getElementById('img-width').value) || currentImage.width;
     const targetHeight = parseInt(document.getElementById('img-height').value) || currentImage.height;
     
     canvas.width = targetWidth;
     canvas.height = targetHeight;
     
-    // Draw and convert
     ctx.drawImage(currentImage, 0, 0, targetWidth, targetHeight);
     const dataUrl = canvas.toDataURL(`image/${format}`, 0.9);
     
-    // Trigger auto-download
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = `hv33y-export.${format}`;
     a.click();
   }
 
-  // --- PDF STUDIO LOGIC ---
+  // --- PDF MERGER LOGIC ---
+  const pdfMergeInput = document.getElementById('pdf-merge-input');
+  const pdfMergeLabel = document.getElementById('pdf-merge-label');
+  let mergeFiles = [];
+
+  pdfMergeInput.addEventListener('change', (e) => {
+    mergeFiles = Array.from(e.target.files);
+    if(mergeFiles.length > 0) {
+      pdfMergeLabel.innerText = `${mergeFiles.length} PDFs selected`;
+    }
+  });
+
+  async function mergePDFs() {
+    if (mergeFiles.length < 2) { alert("Please select at least 2 PDFs to merge."); return; }
+    pdfMergeLabel.innerText = "Merging...";
+    
+    try {
+      const mergedPdf = await PDFLib.PDFDocument.create();
+      for (const file of mergeFiles) {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
+      
+      const mergedPdfBytes = await mergedPdf.save();
+      const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "hv33y_merged.pdf";
+      link.click();
+      
+      pdfMergeLabel.innerText = "Done! Select more PDFs";
+    } catch (err) {
+      alert("Error merging PDFs. Make sure they aren't password protected.");
+      pdfMergeLabel.innerText = "Select PDFs (Multiple allowed)";
+    }
+  }
+
+  // --- PDF PRIVACY STUDIO LOGIC ---
   const pdfInput = document.getElementById('pdf-input');
   const pdfLabel = document.getElementById('pdf-label');
 
@@ -222,7 +284,6 @@ twitter:
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
       
-      // Strip metadata to ensure privacy
       pdfDoc.setTitle('');
       pdfDoc.setAuthor('');
       pdfDoc.setSubject('');
@@ -232,7 +293,6 @@ twitter:
       
       const pdfBytes = await pdfDoc.save();
       
-      // Create a Blob and trigger download
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
@@ -244,6 +304,45 @@ twitter:
       alert("Error processing PDF. Make sure it isn't password protected.");
       pdfLabel.innerText = "Select PDF Document";
     }
+  }
+
+  // --- OG BANNER GENERATOR LOGIC ---
+  const ogInput = document.getElementById('og-input');
+  const ogLabel = document.getElementById('og-label');
+  let ogImage = new Image();
+
+  ogInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    ogLabel.innerText = file.name;
+    const reader = new FileReader();
+    reader.onload = (event) => { ogImage.src = event.target.result; };
+    reader.readAsDataURL(file);
+  });
+
+  function generateOG() {
+    if (!ogImage.src) { alert("Please select a logo first."); return; }
+    
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 1200;
+    canvas.height = 630;
+    
+    ctx.fillStyle = '#050505';
+    ctx.fillRect(0, 0, 1200, 630);
+    
+    const scale = Math.min(1200 / ogImage.width, 630 / ogImage.height);
+    const w = ogImage.width * scale;
+    const h = ogImage.height * scale;
+    const x = (1200 - w) / 2;
+    const y = (630 - h) / 2;
+    
+    ctx.drawImage(ogImage, x, y, w, h);
+    
+    const a = document.createElement('a');
+    a.download = 'og-preview.jpg';
+    a.href = canvas.toDataURL('image/jpeg', 1.0);
+    a.click();
   }
 </script>
 
