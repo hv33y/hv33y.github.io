@@ -23,29 +23,16 @@ robots: "index, follow"
   body.light-mode #theme-toggle { border-color: #d0d7de; color: #24292f; }
 </style>
 
-<button id="theme-toggle">Toggle Light Mode</button>
-<script>
-  const toggleBtn = document.getElementById('theme-toggle');
-  toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('light-mode');
-    if (document.body.classList.contains('light-mode')) {
-      toggleBtn.innerText = 'Toggle Dark Mode';
-    } else {
-      toggleBtn.innerText = 'Toggle Light Mode';
-    }
-  });
-</script>
-
 <link rel="icon" type="image/png" href="hv33y.png">
 <link rel="apple-touch-icon" href="hv33y.png">
 
 <div align="center">
 
-<h2>Developer • Automation • Web Interfaces</h2>
-
 <p>
   <strong>Index</strong> &nbsp;•&nbsp; <a href="/repo">Repositories</a>
 </p>
+
+<h2>Developer • Automation • Web Interfaces</h2>
 
 <p>
   <a href="https://github.com/hv33y">
