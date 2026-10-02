@@ -20,12 +20,11 @@ twitter:
   image: "https://github.com/hv33y.png"
 ---
 
-<link rel="icon" type="image/png" href="hv33y.png">
-<link rel="apple-touch-icon" href="hv33y.png">
+<link rel="icon" type="image/png" href="https://github.com/hv33y.png">
+<link rel="apple-touch-icon" href="https://github.com/hv33y.png">
 
 <div align="center">
 
-<h1>hv33y</h1>
 <h2>Developer • Automation • Web Interfaces</h2>
 
 <p>
@@ -35,7 +34,7 @@ twitter:
   <a href="https://github.com/hv33y"><img src="https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square" alt="License" /></a>
 </p>
 
-Building custom interfaces, system automation, and browser extensions designed for speed, minimal overhead, and modern typography.
+<p>Building custom interfaces, system automation, and browser extensions designed for speed, minimal overhead, and modern typography.</p>
 
 <hr>
 
