@@ -8,25 +8,44 @@ robots: "index, follow"
 ---
 
 <style>
-  /* Strip out all GitHub default styling */
-  header, .page-header { display: none !important; }
+  /* 1. Nuke GitHub's default layout constraints & injected headers */
+  header, .page-header, .project-name, .project-tagline { display: none !important; }
+  .markdown-body > h1:first-child { display: none !important; }
+  
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
   
   body, .markdown-body { 
-    background: radial-gradient(circle at 10% 0%, #1a0b12, #050505 60%) !important; 
+    /* Centered the radial glow */
+    background: radial-gradient(circle at 50% 0%, #1a0b12, #050505 80%) !important; 
+    background-color: #050505 !important;
     color: #f5f5f7 !important; 
     font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; 
-    margin: 0;
-    padding: 20px;
-    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* 2. Break out of the left-aligned container and center the grid */
+  .wrapper, .container, .container-lg, .markdown-body, main, section {
+    max-width: 1100px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 20px !important;
+    float: none !important;
+    box-sizing: border-box !important;
   }
 
   /* 4DX Hero Section */
   .hero {
     text-align: center;
     padding: 80px 20px 40px;
+    width: 100%;
   }
   .hero h1 {
-    font-size: 4rem !important;
+    font-size: 4.5rem !important;
     font-weight: 900 !important;
     letter-spacing: -0.05em;
     margin-bottom: 10px !important;
@@ -61,6 +80,7 @@ robots: "index, follow"
     font-weight: 600;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   .social-pills a:hover {
     background: rgba(128, 0, 32, 0.2);
@@ -75,6 +95,7 @@ robots: "index, follow"
     gap: 24px;
     max-width: 1000px;
     margin: 60px auto;
+    width: 100%;
   }
 
   /* Glassmorphism Cards */
@@ -113,11 +134,11 @@ robots: "index, follow"
     margin-top: 20px;
   }
   .tag {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
     color: #eaeaea;
     padding: 6px 12px;
     border-radius: 8px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
     display: inline-block;
     margin: 0 6px 6px 0;
@@ -131,12 +152,14 @@ robots: "index, follow"
     flex-wrap: wrap;
     justify-content: center;
     gap: 24px;
+    width: 100%;
   }
   .stats-container img {
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
 </style>
 
