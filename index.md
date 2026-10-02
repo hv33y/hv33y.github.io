@@ -5,6 +5,19 @@ description: "Personal site and project directory for hv33y."
 keywords: "hv33y, hvOS, automation, UI, developer"
 author: "hv33y"
 robots: "index, follow"
+
+og:
+  title: "hv33y | Web Interfaces & Systems"
+  type: website
+  url: "https://hv33y.github.io/"
+  description: "Personal site and project directory for hv33y."
+  image: "https://hv33y.github.io/og-preview.jpg"
+
+twitter:
+  card: summary_large_image
+  title: "hv33y | Web Interfaces & Systems"
+  description: "Personal site and project directory for hv33y."
+  image: "https://hv33y.github.io/og-preview.jpg"
 ---
 
 <style>
@@ -165,7 +178,6 @@ robots: "index, follow"
 
 <link rel="icon" type="image/png" href="hv33y.png">
 <link rel="apple-touch-icon" href="hv33y.png">
-<link rel="manifest" href="manifest.json">
 
 <div class="hero">
   <h1>hv33y</h1>
@@ -174,6 +186,7 @@ robots: "index, follow"
   <div class="social-pills">
     <a href="https://github.com/hv33y">GitHub</a>
     <a href="/repo">Repositories</a>
+    <a href="/tools">Tools</a>
     <a href="/contact">Contact</a>
   </div>
 </div>
