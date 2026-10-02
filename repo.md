@@ -21,10 +21,9 @@ permalink: /repo/
 <p>
   <a href="/">Index</a> &nbsp;•&nbsp; <strong>Repositories</strong>
 </p>
+<hr>
 
 <h2>Repository Directory</h2>
-
-<hr>
 
 </div>
 
