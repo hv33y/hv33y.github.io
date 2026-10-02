@@ -2,6 +2,23 @@
 layout: default
 title: "Repositories | hv33y"
 permalink: /repo/
+description: "Source code index for automation scripts, UI bypasses, and custom web infrastructure."
+keywords: "hv33y, repositories, automation, scripts, github"
+author: "hv33y"
+robots: "index, follow"
+
+og:
+  title: "Repositories | hv33y"
+  type: website
+  url: "https://hv33y.github.io/repo/"
+  description: "Source code index for automation scripts, UI bypasses, and custom web infrastructure."
+  image: "https://hv33y.github.io/og-preview.jpg"
+
+twitter:
+  card: summary_large_image
+  title: "Repositories | hv33y"
+  description: "Source code index for automation scripts, UI bypasses, and custom web infrastructure."
+  image: "https://hv33y.github.io/og-preview.jpg"
 ---
 
 <style>
