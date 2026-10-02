@@ -19,6 +19,22 @@ robots: "index, follow"
   hr { border-top: 1px solid #21262d !important; }
   code { background: rgba(110,118,129,0.4) !important; color: #c9d1d9 !important; border-radius: 4px; padding: 2px 6px; }
 </style>
+<button id="theme-toggle" style="position: fixed; top: 20px; right: 20px; background: transparent; border: 1px solid #30363d; color: #c9d1d9; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-family: 'Google Sans';">Toggle Light Mode</button>
+
+<script>
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const body = document.body;
+    if (body.style.backgroundColor === 'rgb(255, 255, 255)') {
+      body.style.backgroundColor = '#0d1117';
+      body.style.color = '#c9d1d9';
+      document.getElementById('theme-toggle').style.color = '#c9d1d9';
+    } else {
+      body.style.backgroundColor = '#ffffff';
+      body.style.color = '#24292f';
+      document.getElementById('theme-toggle').style.color = '#24292f';
+    }
+  });
+</script>
 
 <link rel="icon" type="image/png" href="hv33y.png">
 <link rel="apple-touch-icon" href="hv33y.png">
