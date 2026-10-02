@@ -22,9 +22,9 @@ twitter:
 
 <div align="center">
 
-# hv33y
+<a href="https://github.com/hv33y" alt="hv33y"/> </a>
 
-**Developer • Automation • Web Interfaces**
+<h2>Developer • Automation • Web Interfaces</h2>
 
 <p>
   <a href="https://github.com/hv33y?tab=repositories"><img src="https://img.shields.io/badge/Repositories-24-blue?style=flat-square&logo=github" alt="Repositories" /></a>
@@ -87,3 +87,4 @@ Languages     : JavaScript, TypeScript, HTML5, CSS3, Batch, Shell
 Environments  : Cloudflare Workers, Node.js, Docker
 Tooling       : Git, Userscripts (Tampermonkey), ADB, Fastboot
 Interface     : Google Sans, Dark Mode, Minimalist Layouts
+```
