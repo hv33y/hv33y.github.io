@@ -22,7 +22,7 @@ twitter:
 
 <div align="center">
 
-<a href="https://github.com/hv33y" alt="hv33y"/> </a>
+<h1><a href="https://github.com/hv33y">hv33y</a></h1>
 
 <h2>Developer • Automation • Web Interfaces</h2>
 
