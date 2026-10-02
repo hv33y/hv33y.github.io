@@ -18,11 +18,11 @@ permalink: /repo/
 
 <div align="center">
 
-<h2>Repository Directory</h2>
-
 <p>
   <a href="/">Index</a> &nbsp;•&nbsp; <strong>Repositories</strong>
 </p>
+
+<h2>Repository Directory</h2>
 
 <hr>
 
