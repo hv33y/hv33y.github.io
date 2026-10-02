@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hv33y.github.io/sitemap.xml
