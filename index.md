@@ -2,36 +2,43 @@
 layout: default
 title: "hv33y | Developer, Automation & Systems"
 description: "Personal site and project directory for hv33y. Custom user interfaces, Cloudflare automations, Tampermonkey userscripts, and lightweight developer utilities."
-keywords: "hv33y, hvOS, automation, userscripts, cloudflare workers, github pages, developer portfolio"
+keywords: "hv33y, hvOS, automation, userscripts, cloudflare workers, github pages"
 author: "hv33y"
 robots: "index, follow"
-
-og:
-  title: "hv33y | Developer, Automation & Systems"
-  type: website
-  url: "https://hv33y.github.io/"
-  description: "Personal site and project directory for hv33y. Custom user interfaces, Cloudflare automations, Tampermonkey userscripts, and lightweight developer utilities."
-  image: "https://github.com/hv33y.png"
-
-twitter:
-  card: summary
-  title: "hv33y | Developer, Automation & Systems"
-  description: "Personal site and project directory for hv33y. Custom user interfaces, Cloudflare automations, Tampermonkey userscripts, and lightweight developer utilities."
-  image: "https://github.com/hv33y.png"
 ---
 
-<link rel="icon" type="image/png" href="https://github.com/hv33y.png">
-<link rel="apple-touch-icon" href="https://github.com/hv33y.png">
+<style>
+  body {
+    background-color: #0d1117 !important;
+    color: #c9d1d9 !important;
+    font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  }
+  a { color: #58a6ff !important; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  table td { border: 1px solid #30363d !important; }
+  hr { border-top: 1px solid #21262d !important; }
+  code { background: rgba(110,118,129,0.4) !important; color: #c9d1d9 !important; border-radius: 4px; padding: 2px 6px; }
+</style>
+
+<link rel="icon" type="image/png" href="hv33y.png">
+<link rel="apple-touch-icon" href="hv33y.png">
 
 <div align="center">
 
 <h2>Developer • Automation • Web Interfaces</h2>
 
 <p>
-  <a href="https://github.com/hv33y?tab=repositories"><img src="https://img.shields.io/badge/Repositories-24-blue?style=flat-square&logo=github" alt="Repositories" /></a>
-  <a href="https://github.com/hv33y?tab=stars"><img src="https://img.shields.io/badge/Stars-389-yellow?style=flat-square&logo=apachespark" alt="Stars" /></a>
-  <a href="https://github.com/hv33y?tab=followers"><img src="https://img.shields.io/badge/Followers-33-green?style=flat-square" alt="Followers" /></a>
-  <a href="https://github.com/hv33y"><img src="https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square" alt="License" /></a>
+  <strong>Index</strong> &nbsp;•&nbsp; <a href="/repo">Repositories</a>
+</p>
+
+<!-- Live GitHub API Stats -->
+<p>
+  <a href="https://github.com/hv33y">
+    <img src="https://github-readme-stats.vercel.app/api?username=hv33y&show_icons=true&theme=dark&hide_border=true&bg_color=0d1117&icon_color=58a6ff&title_color=ffffff&text_color=c9d1d9" alt="hv33y Stats" height="150" />
+  </a>
+  <a href="https://github.com/hv33y">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=hv33y&layout=compact&theme=dark&hide_border=true&bg_color=0d1117&title_color=ffffff&text_color=c9d1d9" alt="Top Languages" height="150" />
+  </a>
 </p>
 
 <p>Building custom interfaces, system automation, and browser extensions designed for speed, minimal overhead, and modern typography.</p>
@@ -71,21 +78,6 @@ twitter:
 
 <hr>
 
-## Systems & Utilities
-
-* **[systemwide-adb-installer](https://github.com/hv33y/systemwide-adb-installer)**: Lightweight one-line Windows script to download, configure, and install Android ADB and Fastboot system-wide.
-* **[delete-linkedin-skills](https://github.com/hv33y/delete-linkedin-skills)**: Rapid DOM automation for mass skills removal.
-* **[reddit-raw-image-viewer](https://github.com/hv33y/reddit-raw-image-viewer)**: Direct media bypass to skip gallery redirects and view full-resolution assets.
-* **[abyss-jellyfin](https://github.com/hv33y/abyss-jellyfin)**: Customized high-contrast dark theme engineered for modern media clients.
-* **[gd-index](https://github.com/hv33y/gd-index)**: Multi-branch cloud drive index explorer.
-
-<hr>
-
-## Tech Stack & Focus
-
-```text
-Languages     : JavaScript, TypeScript, HTML5, CSS3, Batch, Shell
-Environments  : Cloudflare Workers, Node.js, Docker
-Tooling       : Git, Userscripts (Tampermonkey), ADB, Fastboot
-Interface     : Google Sans, Dark Mode, Minimalist Layouts
-```
+<div align="center">
+  <sub>Maintained by <a href="https://github.com/hv33y">hv33y</a> • October 2026</sub>
+</div>
